@@ -115,7 +115,7 @@ react-kit/
 - `python -m venv venv`: Creates a virtual environment.
 - `.\venv\Scripts\activate` or `source venv/bin/activate`: Activates the virtual environment.
 - `pip install -r requirements.txt`: Installs all required Python packages.
-- `python app/main.py`: Starts the backend server.
+- `uvicorn app.main:app --reload --port 8000`: Starts the backend server.
 - `python format.py`: Formats all code in the `/app` directory.
 
 ### Frontend
