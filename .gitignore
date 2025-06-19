@@ -1,0 +1,12 @@
+# Node
+node_modules/
+**/node_modules/
+pnpm-lock.yaml
+
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/*.py[cod]
+
+# Env
+.env

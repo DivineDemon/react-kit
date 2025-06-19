@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "shared/*": ["shared/*"]
+    },
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"]
+}

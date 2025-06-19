@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="react-kit@ep-raspy-moon-a522mkrh-pooler.us-east-2.aws.neon.tech" uuid="7707722e-0134-4d05-89e7-a87cf76bc372">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ep-raspy-moon-a522mkrh-pooler.us-east-2.aws.neon.tech:5432/react-kit?sslmode=require</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>

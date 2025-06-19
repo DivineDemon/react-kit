@@ -1,0 +1,11 @@
+{
+  "formatter": {
+    "indentStyle": "Space",
+    "indentSize": 2,
+    "lineWidth": 80
+  },
+  "rules": {
+    "no-unused-vars": "error",
+    "eqeqeq": ["error", "always"]
+  }
+}
