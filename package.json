@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint-format": "bash scripts/lint-format.sh",
     "gen-models": "bash scripts/generate-models.sh",
     "dev": "pnpm run gen-models && pnpm --filter backend start & pnpm --filter frontend dev",
