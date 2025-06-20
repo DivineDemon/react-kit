@@ -1,4 +1,0 @@
-[tool.ruff]
-select        = ["E", "F", "C"]
-extend-ignore = ["E501"]
-exclude       = ["alembic"]

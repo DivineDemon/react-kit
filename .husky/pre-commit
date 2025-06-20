@@ -1,2 +1,0 @@
-pnpm run lint-format
-pnpm run gen-models
