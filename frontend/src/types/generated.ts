@@ -21,7 +21,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/v1/items/": {
+  "/items/": {
     parameters: {
       query?: never;
       header?: never;
@@ -29,17 +29,17 @@ export interface paths {
       cookie?: never;
     };
     /** Get Items */
-    get: operations["get_items_v1_items__get"];
+    get: operations["get_items_items__get"];
     put?: never;
     /** Create Item */
-    post: operations["create_item_v1_items__post"];
+    post: operations["create_item_items__post"];
     delete?: never;
     options?: never;
     head?: never;
     patch?: never;
     trace?: never;
   };
-  "/v1/items/{item_id}": {
+  "/items/{item_id}": {
     parameters: {
       query?: never;
       header?: never;
@@ -47,12 +47,12 @@ export interface paths {
       cookie?: never;
     };
     /** Get Item */
-    get: operations["get_item_v1_items__item_id__get"];
+    get: operations["get_item_items__item_id__get"];
     /** Update Item */
-    put: operations["update_item_v1_items__item_id__put"];
+    put: operations["update_item_items__item_id__put"];
     post?: never;
     /** Delete Item */
-    delete: operations["delete_item_v1_items__item_id__delete"];
+    delete: operations["delete_item_items__item_id__delete"];
     options?: never;
     head?: never;
     patch?: never;
@@ -188,7 +188,7 @@ export interface operations {
       };
     };
   };
-  get_items_v1_items__get: {
+  get_items_items__get: {
     parameters: {
       query?: never;
       header?: never;
@@ -208,7 +208,7 @@ export interface operations {
       };
     };
   };
-  create_item_v1_items__post: {
+  create_item_items__post: {
     parameters: {
       query?: never;
       header?: never;
@@ -241,7 +241,7 @@ export interface operations {
       };
     };
   };
-  get_item_v1_items__item_id__get: {
+  get_item_items__item_id__get: {
     parameters: {
       query?: never;
       header?: never;
@@ -272,7 +272,7 @@ export interface operations {
       };
     };
   };
-  update_item_v1_items__item_id__put: {
+  update_item_items__item_id__put: {
     parameters: {
       query?: never;
       header?: never;
@@ -307,7 +307,7 @@ export interface operations {
       };
     };
   };
-  delete_item_v1_items__item_id__delete: {
+  delete_item_items__item_id__delete: {
     parameters: {
       query?: never;
       header?: never;

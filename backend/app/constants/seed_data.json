@@ -1,13 +1,11 @@
 {
   "items": [
     {
-      "id": 1,
       "name": "Colored Cool Morty",
       "description": "A cool Morty with a unique color scheme.",
       "image_url": "https://avatars.githubusercontent.com/u/124599?v=4"
     },
     {
-      "id": 2,
       "name": "Mono Cool Morty",
       "description": "A cool Morty with a monochrome color scheme.",
       "image_url": "https://avatars.githubusercontent.com/u/124599?v=4"

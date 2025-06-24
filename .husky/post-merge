@@ -1,15 +1,13 @@
 echo "🌀 Running post-merge tasks…"
 
+# Backend
+cd ../backend || exit 1
+ruff check . --fix
+uvicorn app.main:app --reload
+
 # Frontend
 cd frontend || exit 1
 pnpm run generate:api
 pnpm run lint
-ruff check . --fix
-
-# Backend
-cd ../backend || exit 1
-pnpm run generate:api
-pnpm run lint
-ruff check . --fix
 
 echo "✅ post-merge hooks completed."

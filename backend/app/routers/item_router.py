@@ -16,8 +16,8 @@ async def create_item(item: ItemBase, db: AsyncSession = \
     try:
         item = ORMItem(
             name=item.name,
-            image_url=item.image_url,
-            description=item.description
+            description=item.description,
+            image_url=str(item.image_url)
         )
 
         db.add(item)
@@ -45,11 +45,19 @@ async def get_items(db: AsyncSession = \
     try:
         query = select(ORMItem)
         results = await db.execute(query)
+        items = results.scalars().all()
+
+        if not items:
+            return ResponseModel(
+                data=None,
+                message="No Items Found",
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         return ResponseModel(
             status=status.HTTP_200_OK,
             message="Items Retrieved Successfully",
-            data=[ItemRead.model_validate(item) for item in results]
+            data=[ItemRead.model_validate(item) for item in items]
         )
     except Exception as e:
         return ResponseModel(
@@ -65,8 +73,9 @@ async def get_item(item_id: int, db: AsyncSession = \
     try:
         query = select(ORMItem).where(ORMItem.id == item_id)
         result = await db.execute(query)
+        item = result.scalar_one_or_none()
 
-        if not result:
+        if not item:
             return ResponseModel(
                 data=None,
                 message="Item Not Found",
@@ -75,7 +84,7 @@ async def get_item(item_id: int, db: AsyncSession = \
 
         return ResponseModel(
             status=status.HTTP_200_OK,
-            data=ItemRead.model_validate(result),
+            data=ItemRead.model_validate(item),
             message="Item Retrieved Successfully"
         )
     except Exception as e:
@@ -92,8 +101,9 @@ async def update_item(item_id: int, item: ItemUpdate, db: AsyncSession = \
     try:
         query = select(ORMItem).where(ORMItem.id == item_id)
         result = await db.execute(query)
+        db_item = result.scalar_one_or_none()
 
-        if not result:
+        if not db_item:
             return ResponseModel(
                 data=None,
                 message="Item Not Found",
@@ -101,15 +111,18 @@ async def update_item(item_id: int, item: ItemUpdate, db: AsyncSession = \
             )
 
         for key, value in item.model_dump(exclude_unset=True).items():
-            setattr(result, key, value)
+            if key == "image_url" and value is not None:
+                setattr(db_item, key, str(value))
+            else:
+                setattr(db_item, key, value)
 
         await db.commit()
-        await db.refresh(result)
+        await db.refresh(db_item)
 
         return ResponseModel(
             status=status.HTTP_200_OK,
             message="Item Updated Successfully",
-            data=ItemRead.model_validate(result)
+            data=ItemRead.model_validate(db_item)
         )
     except Exception as e:
         await db.rollback()
@@ -127,15 +140,16 @@ async def delete_item(item_id: int, db: AsyncSession = \
     try:
         query = select(ORMItem).where(ORMItem.id == item_id)
         result = await db.execute(query)
+        item = result.scalar_one_or_none()
 
-        if not result:
+        if not item:
             return ResponseModel(
                 data=None,
                 message="Item Not Found",
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        await db.delete(result)
+        await db.delete(item)
         await db.commit()
 
         return ResponseModel(

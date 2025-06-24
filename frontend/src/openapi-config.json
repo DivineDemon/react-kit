@@ -1,0 +1,9 @@
+{
+  "schemaFile": "http://127.0.0.1:8000/openapi.json",
+  "apiFile": "./store/services/core.ts",
+  "apiImport": "api",
+  "outputFile": "./store/services/apis.ts",
+  "exportName": "appApis",
+  "hooks": true,
+  "tag": true
+}
