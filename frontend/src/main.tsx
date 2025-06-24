@@ -1,10 +1,8 @@
 import { createRoot } from "react-dom/client";
 import "./assets/css/index.css";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import Providers from "./components/providers";
 import { routeTree } from "./routeTree.gen";
-import store, { persistor } from "./store";
 
 const router = createRouter({ routeTree });
 
@@ -18,10 +16,8 @@ const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = createRoot(rootElement);
   root.render(
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <RouterProvider router={router} />
-      </PersistGate>
-    </Provider>,
+    <Providers>
+      <RouterProvider router={router} />
+    </Providers>,
   );
 }

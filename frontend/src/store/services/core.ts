@@ -29,14 +29,5 @@ const baseQueryWith401Handling: typeof baseQuery = async (args, api, extraOption
 export const api = createApi({
   baseQuery: baseQueryWith401Handling,
   keepUnusedDataFor: 5,
-  tagTypes: ["Business", "Businesses", "Ticket", "Tickets", "TicketStats", "Knowledge"],
-  endpoints: (build) => ({
-    healthCheck: build.query({
-      query: () => ({
-        url: "/",
-        method: "GET",
-      }),
-      transformResponse: (response: HealthCheck) => response,
-    }),
-  }),
+  endpoints: () => ({}),
 });
