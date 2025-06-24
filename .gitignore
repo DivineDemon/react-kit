@@ -1,0 +1,11 @@
+# Global
+.env
+.venv/
+
+# Python
+__pycache__/
+.ruff_cache/
+
+# React
+node_modules/
+dist/
