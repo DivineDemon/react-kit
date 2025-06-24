@@ -116,7 +116,7 @@ cp .env.example .env  # Set VITE_BASE_API_URL to your backend
 - **Frontend:**
   ```sh
   cd frontend
-  pnpm dev
+  pnpm run dev
   ```
 
 ---
