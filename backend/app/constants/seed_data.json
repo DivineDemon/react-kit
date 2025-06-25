@@ -1,14 +1,38 @@
 {
-  "items": [
+  "users": [
     {
-      "name": "Colored Cool Morty",
-      "description": "A cool Morty with a unique color scheme.",
-      "image_url": "https://avatars.githubusercontent.com/u/124599?v=4"
+      "email": "alice@example.com",
+      "password": "alice@123",
+      "first_name": "Alice",
+      "last_name": "Smith",
+      "profile_picture": "https://randomuser.me/api/portraits/women/1.jpg"
     },
     {
-      "name": "Mono Cool Morty",
-      "description": "A cool Morty with a monochrome color scheme.",
-      "image_url": "https://avatars.githubusercontent.com/u/124599?v=4"
+      "email": "bob@example.com",
+      "password": "bob@123",
+      "first_name": "Bob",
+      "last_name": "Johnson",
+      "profile_picture": "https://randomuser.me/api/portraits/men/2.jpg"
+    }
+  ],
+  "items": [
+    {
+      "name": "Alice's First Item",
+      "description": "An item belonging to Alice.",
+      "image_url": "https://via.placeholder.com/150",
+      "owner_id": 1
+    },
+    {
+      "name": "Alice's Second Item",
+      "description": "Another item belonging to Alice.",
+      "image_url": "https://via.placeholder.com/150",
+      "owner_id": 1
+    },
+    {
+      "name": "Bob's Item",
+      "description": "An item belonging to Bob.",
+      "image_url": "https://via.placeholder.com/150",
+      "owner_id": 2
     }
   ]
 }

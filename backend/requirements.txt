@@ -6,3 +6,6 @@ sqlalchemy[asyncio]
 uvicorn
 ruff
 asyncpg
+passlib
+python-jose[cryptography]
+bcrypt

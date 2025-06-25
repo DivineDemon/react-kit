@@ -2,36 +2,42 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.constants.utils import get_current_user
 from app.core.db import get_db
 from app.models.item import Item as ORMItem
 from app.schemas.generic import ResponseModel
 from app.schemas.item_schema import ItemBase, ItemDelete, ItemRead, ItemUpdate
 
-router = APIRouter(prefix="/items", tags=["items"])
+router = APIRouter(
+    prefix="/items",
+    tags=["items"],
+    dependencies=[Depends(get_current_user)]
+)
 
 
-@router.post("/")
-async def create_item(item: ItemBase, db: AsyncSession = \
-                       Depends(get_db)) -> ResponseModel[ItemRead]:
+@router.post("/", response_model=ResponseModel[ItemRead],
+             status_code=status.HTTP_201_CREATED)
+async def create_item(
+    item: ItemBase,
+    db: AsyncSession = Depends(get_db)
+):
     try:
-        item = ORMItem(
+        new_item = ORMItem(
             name=item.name,
             description=item.description,
             image_url=str(item.image_url)
         )
-
-        db.add(item)
+        db.add(new_item)
         await db.commit()
-        await db.refresh(item)
+        await db.refresh(new_item)
 
         return ResponseModel(
             status=status.HTTP_201_CREATED,
-            data=ItemRead.model_validate(item),
+            data=ItemRead.model_validate(new_item),
             message="Item Created Successfully"
         )
     except Exception as e:
         await db.rollback()
-
         return ResponseModel(
             data=None,
             message=str(e),
@@ -39,13 +45,15 @@ async def create_item(item: ItemBase, db: AsyncSession = \
         )
 
 
-@router.get("/")
-async def get_items(db: AsyncSession = \
-                     Depends(get_db)) -> ResponseModel[list[ItemRead]]:
+@router.get("/", response_model=ResponseModel[list[ItemRead]])
+async def get_items(
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
     try:
-        query = select(ORMItem)
-        results = await db.execute(query)
-        items = results.scalars().all()
+        result = await db.execute(select(ORMItem).
+                                  where(ORMItem.owner_id == current_user.user_id))
+        items = result.scalars().all()
 
         if not items:
             return ResponseModel(
@@ -57,7 +65,7 @@ async def get_items(db: AsyncSession = \
         return ResponseModel(
             status=status.HTTP_200_OK,
             message="Items Retrieved Successfully",
-            data=[ItemRead.model_validate(item) for item in items]
+            data=[ItemRead.model_validate(i) for i in items]
         )
     except Exception as e:
         return ResponseModel(
@@ -67,12 +75,13 @@ async def get_items(db: AsyncSession = \
         )
 
 
-@router.get("/{item_id}")
-async def get_item(item_id: int, db: AsyncSession = \
-                    Depends(get_db)) -> ResponseModel[ItemRead]:
+@router.get("/{item_id}", response_model=ResponseModel[ItemRead])
+async def get_item(
+    item_id: int,
+    db: AsyncSession = Depends(get_db)
+):
     try:
-        query = select(ORMItem).where(ORMItem.id == item_id)
-        result = await db.execute(query)
+        result = await db.execute(select(ORMItem).where(ORMItem.id == item_id))
         item = result.scalar_one_or_none()
 
         if not item:
@@ -95,12 +104,14 @@ async def get_item(item_id: int, db: AsyncSession = \
         )
 
 
-@router.put("/{item_id}")
-async def update_item(item_id: int, item: ItemUpdate, db: AsyncSession = \
-                       Depends(get_db)) -> ResponseModel[ItemRead]:
+@router.put("/{item_id}", response_model=ResponseModel[ItemRead])
+async def update_item(
+    item_id: int,
+    item: ItemUpdate,
+    db: AsyncSession = Depends(get_db)
+):
     try:
-        query = select(ORMItem).where(ORMItem.id == item_id)
-        result = await db.execute(query)
+        result = await db.execute(select(ORMItem).where(ORMItem.id == item_id))
         db_item = result.scalar_one_or_none()
 
         if not db_item:
@@ -110,11 +121,9 @@ async def update_item(item_id: int, item: ItemUpdate, db: AsyncSession = \
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        for key, value in item.model_dump(exclude_unset=True).items():
-            if key == "image_url" and value is not None:
-                setattr(db_item, key, str(value))
-            else:
-                setattr(db_item, key, value)
+        for k, v in item.model_dump(exclude_unset=True).items():
+            setattr(db_item, k, str(v) if k ==
+                    "image_url" and v is not None else v)
 
         await db.commit()
         await db.refresh(db_item)
@@ -126,7 +135,6 @@ async def update_item(item_id: int, item: ItemUpdate, db: AsyncSession = \
         )
     except Exception as e:
         await db.rollback()
-
         return ResponseModel(
             data=None,
             message=str(e),
@@ -134,12 +142,13 @@ async def update_item(item_id: int, item: ItemUpdate, db: AsyncSession = \
         )
 
 
-@router.delete("/{item_id}")
-async def delete_item(item_id: int, db: AsyncSession = \
-                       Depends(get_db)) -> ResponseModel[ItemDelete]:
+@router.delete("/{item_id}", response_model=ResponseModel[ItemDelete])
+async def delete_item(
+    item_id: int,
+    db: AsyncSession = Depends(get_db)
+):
     try:
-        query = select(ORMItem).where(ORMItem.id == item_id)
-        result = await db.execute(query)
+        result = await db.execute(select(ORMItem).where(ORMItem.id == item_id))
         item = result.scalar_one_or_none()
 
         if not item:
@@ -159,7 +168,6 @@ async def delete_item(item_id: int, db: AsyncSession = \
         )
     except Exception as e:
         await db.rollback()
-
         return ResponseModel(
             data=None,
             message=str(e),
