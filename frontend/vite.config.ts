@@ -6,12 +6,12 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [
-    tailwindcss(),
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,
     }),
     react(),
+    tailwindcss(),
   ],
   resolve: {
     alias: {

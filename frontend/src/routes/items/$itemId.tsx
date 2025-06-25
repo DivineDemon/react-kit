@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { useGetItemItemsItemIdGetQuery } from "@/store/services/apis";
 
 export const Route = createFileRoute("/items/$itemId")({
@@ -16,7 +17,7 @@ function ItemDetails() {
   });
 
   return (
-    <div className="flex h-[calc(100vh-64px)] w-full flex-col items-start justify-start py-5">
+    <div className="flex h-full w-full flex-col items-start justify-start py-5">
       <MaxWidthWrapper>
         {isLoading ? (
           <div className="flex h-full w-full items-center justify-center">
@@ -26,7 +27,13 @@ function ItemDetails() {
           <Card className="w-full">
             <CardHeader>
               <div className="flex w-full items-center justify-start gap-2.5">
-                <img src={data?.data?.image_url} alt="item-image" className="size-10 rounded-md" />
+                <img
+                  src={data?.data?.image_url}
+                  alt="item-image"
+                  className={cn("size-10 rounded-md", {
+                    grayscale: data?.data?.name.includes("Mono"),
+                  })}
+                />
                 <div className="flex w-full flex-col items-center justify-center gap-1.5">
                   <CardTitle className="w-full text-left">Item Details</CardTitle>
                   <CardDescription className="w-full text-left">

@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "@/store";
-import Navbar from "./navbar";
 import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "./ui/sonner";
 
@@ -16,7 +15,6 @@ function Providers({ children }: ProviderProps) {
       <PersistGate persistor={persistor}>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <Toaster richColors={true} duration={1500} />
-          <Navbar />
           {children}
         </ThemeProvider>
       </PersistGate>

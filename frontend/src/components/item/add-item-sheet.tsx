@@ -33,7 +33,7 @@ function AddItemSheet({ id, open, setOpen }: AddItemSheetProps) {
       itemId: id || 0,
     },
     {
-      skip: !open,
+      skip: !open || !id,
       refetchOnMountOrArgChange: true,
     },
   );

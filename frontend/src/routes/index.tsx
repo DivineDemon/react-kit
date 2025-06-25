@@ -16,7 +16,7 @@ function Index() {
 
   return (
     <>
-      <div className="flex h-[calc(100vh-64px)] w-full flex-col items-start justify-start py-5">
+      <div className="flex h-full w-full flex-col items-start justify-start py-5">
         <MaxWidthWrapper>
           {isLoading ? (
             <div className="flex h-full w-full items-center justify-center">
