@@ -14,19 +14,20 @@ router = APIRouter(
     dependencies=[Depends(get_current_user)]
 )
 
-
-@router.post("/", response_model=ResponseModel[ItemRead],
-             status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=ResponseModel[ItemRead])
 async def create_item(
     item: ItemBase,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_current_user)
 ):
     try:
         new_item = ORMItem(
             name=item.name,
             description=item.description,
-            image_url=str(item.image_url)
+            image_url=str(item.image_url),
+            owner_id=current_user.user_id
         )
+
         db.add(new_item)
         await db.commit()
         await db.refresh(new_item)

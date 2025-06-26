@@ -1,5 +1,6 @@
+import { setProfilePicture, setToken } from "../slices/global";
 import { api } from "./core";
-export const addTagTypes = ["items"] as const;
+export const addTagTypes = ["items", "users"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
@@ -43,6 +44,55 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["items", "items"],
       }),
+      registerUserUsersRegisterPost: build.mutation<
+        RegisterUserUsersRegisterPostApiResponse,
+        RegisterUserUsersRegisterPostApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/register`,
+          method: "POST",
+          body: queryArg.userBase,
+        }),
+        invalidatesTags: ["users", "users"],
+      }),
+      loginUserUsersLoginPost: build.mutation<LoginUserUsersLoginPostApiResponse, LoginUserUsersLoginPostApiArg>({
+        query: (queryArg) => ({
+          url: `/users/login`,
+          method: "POST",
+          body: queryArg.userLogin,
+        }),
+        invalidatesTags: ["users", "users"],
+        onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+          const { data } = await queryFulfilled;
+
+          if (data.status === 200) {
+            dispatch(setToken(data.data?.token || ""));
+            dispatch(setProfilePicture(data.data?.profile_picture || ""));
+          }
+        },
+      }),
+      getMyProfileUsersMeGet: build.query<GetMyProfileUsersMeGetApiResponse, GetMyProfileUsersMeGetApiArg>({
+        query: () => ({ url: `/users/me` }),
+        providesTags: ["users", "users"],
+      }),
+      updateUserProfileUsersMePut: build.mutation<
+        UpdateUserProfileUsersMePutApiResponse,
+        UpdateUserProfileUsersMePutApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/me`,
+          method: "PUT",
+          body: queryArg.userUpdate,
+        }),
+        invalidatesTags: ["users", "users"],
+      }),
+      deleteUserProfileUsersMeDelete: build.mutation<
+        DeleteUserProfileUsersMeDeleteApiResponse,
+        DeleteUserProfileUsersMeDeleteApiArg
+      >({
+        query: () => ({ url: `/users/me`, method: "DELETE" }),
+        invalidatesTags: ["users", "users"],
+      }),
     }),
     overrideExisting: false,
   });
@@ -51,7 +101,7 @@ export type HealthCheckGetApiResponse = /** status 200 Successful Response */ Re
 export type HealthCheckGetApiArg = void;
 export type GetItemsItemsGetApiResponse = /** status 200 Successful Response */ ResponseModelListItemRead;
 export type GetItemsItemsGetApiArg = void;
-export type CreateItemItemsPostApiResponse = /** status 200 Successful Response */ ResponseModelItemRead;
+export type CreateItemItemsPostApiResponse = /** status 201 Successful Response */ ResponseModelItemRead;
 export type CreateItemItemsPostApiArg = {
   itemBase: ItemBase;
 };
@@ -68,6 +118,22 @@ export type DeleteItemItemsItemIdDeleteApiResponse = /** status 200 Successful R
 export type DeleteItemItemsItemIdDeleteApiArg = {
   itemId: number;
 };
+export type RegisterUserUsersRegisterPostApiResponse = /** status 200 Successful Response */ ResponseModelUserRead;
+export type RegisterUserUsersRegisterPostApiArg = {
+  userBase: UserBase;
+};
+export type LoginUserUsersLoginPostApiResponse = /** status 200 Successful Response */ ResponseModelUserRead;
+export type LoginUserUsersLoginPostApiArg = {
+  userLogin: UserLogin;
+};
+export type GetMyProfileUsersMeGetApiResponse = /** status 200 Successful Response */ ResponseModelUserRead;
+export type GetMyProfileUsersMeGetApiArg = void;
+export type UpdateUserProfileUsersMePutApiResponse = /** status 200 Successful Response */ ResponseModelUserRead;
+export type UpdateUserProfileUsersMePutApiArg = {
+  userUpdate: UserUpdate;
+};
+export type DeleteUserProfileUsersMeDeleteApiResponse = /** status 200 Successful Response */ ResponseModelUserDelete;
+export type DeleteUserProfileUsersMeDeleteApiArg = void;
 export type HealthBase = {
   status: string;
   message: string;
@@ -119,6 +185,47 @@ export type ResponseModelItemDelete = {
   data?: ItemDelete | null;
   message?: string;
 };
+export type UserRead = {
+  email: string;
+  password: string;
+  last_name: string;
+  first_name: string;
+  profile_picture?: string | null;
+  id: number;
+  token?: string | null;
+};
+export type ResponseModelUserRead = {
+  status?: number;
+  data?: UserRead | null;
+  message?: string;
+};
+export type UserBase = {
+  email: string;
+  password: string;
+  last_name: string;
+  first_name: string;
+  profile_picture?: string | null;
+};
+export type UserLogin = {
+  email: string;
+  password: string;
+};
+export type UserUpdate = {
+  email?: string | null;
+  last_name?: string | null;
+  first_name?: string | null;
+  new_password?: string | null;
+  current_password?: string | null;
+  profile_picture?: string | null;
+};
+export type UserDelete = {
+  id: number;
+};
+export type ResponseModelUserDelete = {
+  status?: number;
+  data?: UserDelete | null;
+  message?: string;
+};
 export const {
   useHealthCheckGetQuery,
   useGetItemsItemsGetQuery,
@@ -126,4 +233,9 @@ export const {
   useGetItemItemsItemIdGetQuery,
   useUpdateItemItemsItemIdPutMutation,
   useDeleteItemItemsItemIdDeleteMutation,
+  useRegisterUserUsersRegisterPostMutation,
+  useLoginUserUsersLoginPostMutation,
+  useGetMyProfileUsersMeGetQuery,
+  useUpdateUserProfileUsersMePutMutation,
+  useDeleteUserProfileUsersMeDeleteMutation,
 } = injectedRtkApi;

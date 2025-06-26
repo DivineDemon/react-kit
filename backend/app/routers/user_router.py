@@ -177,7 +177,8 @@ async def update_user_profile(
         for attr in ["first_name", "last_name", "profile_picture"]:
             value = getattr(user, attr, None)
             if value is not None:
-                setattr(db_user, attr, value)
+                setattr(db_user, attr, str(value) if attr ==
+                        "profile_picture" else value)
 
         await db.commit()
         await db.refresh(db_user)

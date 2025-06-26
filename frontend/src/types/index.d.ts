@@ -6,8 +6,8 @@ declare type Item = {
 };
 
 declare type GlobalState = {
-  item: Item | null;
   token: string | null;
+  profile_picture: string | null;
 };
 
 declare type HealthCheck = {

@@ -12,10 +12,10 @@ import {
 } from "@/store/services/apis";
 import { Button } from "../ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import ImageUploader from "../ui/image-uploader";
 import { Input } from "../ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "../ui/sheet";
 import { Textarea } from "../ui/textarea";
-import ImageUploader from "./item-image-uploader";
 
 interface AddItemSheetProps {
   id?: number;

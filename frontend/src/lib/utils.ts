@@ -27,3 +27,39 @@ export async function uploadToImgbb(image: File): Promise<string> {
 
   return imageData.data.url;
 }
+
+interface ValidationResult {
+  valid: boolean;
+  errors: string[];
+}
+
+export function validatePassword(password: string): ValidationResult {
+  const errors: string[] = [];
+
+  if (password.length < 8) {
+    errors.push("Password must be at least 8 characters long.");
+  } else if (password.length > 128) {
+    errors.push("Password must be no more than 128 characters long.");
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    errors.push("Password must contain at least one uppercase letter (A–Z).");
+  }
+
+  if (!/[a-z]/.test(password)) {
+    errors.push("Password must contain at least one lowercase letter (a–z).");
+  }
+
+  if (!/[0-9]/.test(password)) {
+    errors.push("Password must contain at least one digit (0–9).");
+  }
+
+  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
+    errors.push("Password must contain at least one special character (e.g. !@#$%^&*).");
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+}
