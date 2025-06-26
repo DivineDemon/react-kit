@@ -2,11 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireAuth } from "@/lib/route-guard";
 import { cn } from "@/lib/utils";
 import { useGetItemItemsItemIdGetQuery } from "@/store/services/apis";
 
-export const Route = createFileRoute("/items/$itemId")({
+export const Route = createFileRoute("/items/$itemId/")({
   component: ItemDetails,
+  beforeLoad: async () => {
+    await requireAuth();
+  },
 });
 
 function ItemDetails() {

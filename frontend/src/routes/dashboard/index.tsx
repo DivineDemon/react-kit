@@ -4,10 +4,14 @@ import { useState } from "react";
 import AddItemSheet from "@/components/item/add-item-sheet";
 import ItemCard from "@/components/item/item-card";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
+import { requireAuth } from "@/lib/route-guard";
 import { useGetItemsItemsGetQuery } from "@/store/services/apis";
 
 export const Route = createFileRoute("/dashboard/")({
   component: Index,
+  beforeLoad: async () => {
+    await requireAuth();
+  },
 });
 
 function Index() {
