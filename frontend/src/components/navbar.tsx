@@ -26,7 +26,7 @@ function Navbar() {
           <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Avatar>
+              <Avatar className="bg-muted">
                 <AvatarImage alt="profile-picture" src={profile_picture ?? ""} />
                 <AvatarFallback className="p-2">
                   <User2 />
