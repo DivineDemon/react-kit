@@ -9,32 +9,25 @@ from app.core.db import init_db
 from app.routers.index import router as main_router
 
 
-def create_app() -> FastAPI:
-    @asynccontextmanager
-    async def lifespan(app: FastAPI):
-        await init_db()
-        yield
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()
+    yield
+app = FastAPI(
+    title=settings.APP_NAME,
+    version=settings.VERSION,
+    lifespan=lifespan,
+)
 
-    app = FastAPI(
-        lifespan=lifespan,
-        title=settings.APP_NAME,
-        version=settings.VERSION,
-    )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-
-    app.include_router(main_router)
-
-    return app
-
-
-app = create_app()
+app.include_router(main_router)
 
 if __name__ == "__main__":
     uvicorn.run(
