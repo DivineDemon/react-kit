@@ -34,7 +34,8 @@
         }
       },
       "suspicious": {
-        "noDoubleEquals": "error"
+        "noDoubleEquals": "error",
+        "noConsole": "error"
       },
       "nursery": {
         "useSortedClasses": "error"
